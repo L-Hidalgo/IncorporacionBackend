@@ -28,6 +28,13 @@ class CreatePersonasTable extends Migration {
             $table->string('telefono')->nullable();
             $table->string('imagen')->nullable();
             $table->timestamps();
+            //poai
+            $table->string('funcionario_tipo')->nullable();
+            $table->date('funcionario_epoai')->nullable();
+            $table->date('funcionarios_empuestos')->nullable();
+            $table->string('funcionarios_eevaluacion')->nullable();
+            $table->string('imagen')->nullable();
+            //
             $table->foreign('grado_academico_id')->references('id')->on('grados_academicos');
             $table->foreign('area_formacion_id')->references('id')->on('area_de_formaciones');
             $table->foreign('institucion_id')->references('id')->on('instituciones');
