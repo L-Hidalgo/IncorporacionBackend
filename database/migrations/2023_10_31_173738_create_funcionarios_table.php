@@ -4,12 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePersonasPuestosTable extends Migration
+return new class extends Migration
 {
-
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        Schema::create('personas_puestos', function (Blueprint $table) {
+        Schema::create('funcionarios', function (Blueprint $table) {
             $table->id();
             $table->string('estado_formacion')->nullable();
             $table->string('file_ac')->nullable();
@@ -20,18 +22,17 @@ class CreatePersonasPuestosTable extends Migration
             $table->tinyInteger('estado')->nullable();
             $table->unsignedBigInteger('puesto_id');
             $table->unsignedBigInteger('persona_id');
-            $table->unsignedBigInteger('creador_user_id')->nullable();
-            $table->unsignedBigInteger('actualizador_user_id')->nullable();
-            $table->foreign('creador_user_id')->references('id')->on('users')->nullable();
-            $table->foreign('actualizador_user_id')->references('id')->on('users')->nullable();
             $table->foreign('puesto_id')->references('id')->on('puestos');
             $table->foreign('persona_id')->references('id')->on('personas');
             $table->timestamps();
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        Schema::dropIfExists('personas_puestos');
+        Schema::dropIfExists('funcionarios');
     }
 };

@@ -11,19 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('_poai', function (Blueprint $table) {
+        Schema::create('poai', function (Blueprint $table) {
             $table->id();
-            $table->bigIntege('ci')->unique();
-            $table->string('exp')->nullable();
-            $table->string('nombres')->nullable();
-            $table->string('primer_apellido')->nullable();
-            $table->string('segundo_apellido')->nullable();
-            $table->string('nombre_completo');
-            $table->bigIntege('poai_item');
-            $table->string('poai_dcargo')->nullable();
-            $table->string('poai_dpuesto')->nullable();
-            $table->string('poai_gerencia')->nullable();
-            $table->string('poai_departamento')->nullable();
+            $table->unsignedBigInteger('persona_id');
+            $table->unsignedBigInteger('puesto_nuevo_id');
             $table->string('poai_cargojefe')->nullable();
             $table->string('poai_cargojerarquico')->nullable();
             $table->string('poai_nivel')->nullable();
@@ -46,6 +37,8 @@ return new class extends Migration
             $table->string('poai_jefe_inmediato')->nullable();
             $table->string('poai_superior_jerarquico')->nullable();
             $table->string('poai_obs')->nullable();
+            $table->foreign('persona_id')->references('id')->on('personas');
+            $table->foreign('puesto_nuevo_id')->references('id')->on('puestos');
             $table->timestamps();
         });
     }

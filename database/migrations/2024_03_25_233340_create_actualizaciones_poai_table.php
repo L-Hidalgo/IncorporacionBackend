@@ -20,6 +20,8 @@ return new class extends Migration
             $table->bigInteger('avance_actualiz')->nullable(); 
             $table->bigInteger('ponderacion_actualiz')->nullable(); 
             $table->string('resultado_actualiz')->nullable(); 
+            $table->unsignedBigInteger('poai_id');
+            $table->foreign('poai_id')->references('id')->on('poai');
             $table->timestamps();
         });
     }

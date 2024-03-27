@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tmp_funciones_poai', function (Blueprint $table) {
+        Schema::create('temp_funciones_poai', function (Blueprint $table) {
             $table->id();
-            $table->bigIntege('numero')->unique();
+            $table->bigInteger('numero')->unique();
             $table->string('funcion')->nullable();
-            $table->bigIntege('item')->unique();
-            $table->string('gerencia')->nullable();
-            $table->bigIntege('departamento')->unique();
+            $table->unsignedBigInteger('puesto_id');
+            $table->foreign('puesto_id')->references('id')->on('puestos');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tmp_funciones_poai');
+        Schema::dropIfExists('temp_funciones_poai');
     }
 };

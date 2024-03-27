@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('no_programadas_poai', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('id_factorb')->unique();
             $table->bigInteger('no_noprog')->nullable();
-            $table->string('descripcion_noprog')->nullable();
-            $table->string('programado_noprog')->nullable();
-            $table->bigInteger('avance_noprog')->unique();
-            $table->bigInteger('ponderacion_noprog')->nullable();
-            $table->string('resultado_noprog')->nullable();
+            $table->string('descripcion')->nullable();
+            $table->string('programado')->nullable();
+            $table->bigInteger('avance')->unique();
+            $table->bigInteger('ponderacion')->nullable();
+            $table->string('resultado')->nullable();
+            $table->unsignedBigInteger('poai_id');
+            $table->foreign('poai_id')->references('id')->on('poai');
             $table->timestamps();
         });
     }
