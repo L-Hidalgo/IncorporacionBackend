@@ -12,25 +12,17 @@ class CreatePersonasTable extends Migration {
             $table->id();
             $table->string('ci')->unique();
             $table->string('exp')->nullable();
-            $table->string('nombres')->nullable();
             $table->string('primer_apellido')->nullable();
             $table->string('segundo_apellido')->nullable();
+            $table->string('nombres')->nullable();
             $table->string('nombre_completo');
-            $table->string('sexo');
-            $table->string('formacion')->nullable();
-            $table->unsignedBigInteger('grado_academico_id')->nullable();
-            $table->unsignedBigInteger('area_formacion_id')->nullable();
-            $table->unsignedBigInteger('institucion_id')->nullable();
-            $table->date('anio_conclusion')->nullable();
-            $table->tinyInteger('con_respaldo')->nullable();
+            $table->string('ocupacion')->nullable();
+            $table->string('genero');
             $table->date('fecha_nacimiento')->nullable();
-            $table->date('fecha_inicion_sin')->nullable(); //esto
             $table->string('telefono')->nullable();
             $table->string('imagen')->nullable();
+             // $table->tinyInteger('con_documentos')->nullable();
             $table->timestamps();
-            $table->foreign('grado_academico_id')->references('id')->on('grados_academicos');
-            $table->foreign('area_formacion_id')->references('id')->on('area_de_formaciones');
-            $table->foreign('institucion_id')->references('id')->on('instituciones');
         });
     }
 

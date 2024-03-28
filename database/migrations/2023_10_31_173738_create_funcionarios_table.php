@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('funcionarios', function (Blueprint $table) {
             $table->id();
-            $table->string('estado_formacion')->nullable();
             $table->string('file_ac')->nullable();
-            $table->date('fecha_inicio')->nullable();
-            $table->string('personal_antiguo_en_el_cargo')->nullable();
-            $table->string('motivo_baja')->nullable();
-            $table->date('fecha_fin')->nullable();
-            $table->tinyInteger('estado')->nullable();
+            $table->date('fecha_inicion_sin')->nullable();
+            $table->date('fecha_inicion_fin')->nullable();
+            $table->date('fecha_inicio_puesto')->nullable();
+            $table->date('fecha_fin_puesto')->nullable();
+            $table->string('motivo_baja')->nullable(); 
             $table->unsignedBigInteger('puesto_id');
             $table->unsignedBigInteger('persona_id');
             $table->foreign('puesto_id')->references('id')->on('puestos');

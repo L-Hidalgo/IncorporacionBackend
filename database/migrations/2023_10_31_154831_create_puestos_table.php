@@ -14,12 +14,12 @@ class CreatePuestosTable extends Migration
             $table->integer('item')->nullable();
             $table->string('denominacion')->nullable();
             $table->text('objetivo')->nullable();
-            $table->string('estado')->nullable();
             $table->integer('salario')->nullable();
             $table->string('salario_literal')->nullable();
+            $table->string('estado')->nullable(); //es acefalia o ocupado
             $table->unsignedBigInteger('departamento_id');
             $table->foreign('departamento_id')->references('id')->on('departamentos');
-            $table->foreignId('persona_actual_id')->nullable()->constrained('personas');
+            //$table->foreignId('persona_actual_id')->nullable()->constrained('personas'); --> descomentar
             $table->timestamps();
         });
     }

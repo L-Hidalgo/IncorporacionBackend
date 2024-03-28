@@ -18,7 +18,7 @@ class PuestoController extends Controller
     }
 
     public function getByItem($item) {
-        $puesto = Puesto::with(['persona_actual:id,nombre_completo,nombres,primer_apellido,segundo_apellido,ci,exp,sexo'])->select(['denominacion', 'item', 'id','persona_actual_id'])->where('item', $item)->first();
+        $puesto = Puesto::with(['persona_actual:id,nombre_completo,nombres,primer_apellido,segundo_apellido,ci,exp,genero'])->select(['denominacion', 'item', 'id','persona_actual_id'])->where('item', $item)->first();
         return $this->sendSuccess($puesto);
     }
 }

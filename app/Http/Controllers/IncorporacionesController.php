@@ -146,9 +146,9 @@ class IncorporacionesController extends Controller
 
         if ($persona) {
             $dataPersona = $request->input('persona');
-            if ($dataPersona['anio_conclusion']) {
-                $anioConclusion = Carbon::parse($dataPersona['anio_conclusion'])->setTimezone('UTC')->format('Y-m-d');
-                $persona->anio_conclusion = $anioConclusion;
+            if ($dataPersona['anio_conclusion_estudios']) {
+                $anioConclusion = Carbon::parse($dataPersona['anio_conclusion_estudios'])->setTimezone('UTC')->format('Y-m-d');
+                $persona->anio_conclusion_estudios = $anioConclusion;
             }
             if ($dataPersona['fecha_nacimiento']) {
                 $fechaNacFormated = Carbon::parse($dataPersona['fecha_nacimiento'])->setTimezone('UTC')->format('Y-m-d');
@@ -157,7 +157,7 @@ class IncorporacionesController extends Controller
             $persona->grado_academico_id = $dataPersona['grado_academico_id'] ?? null;
             $persona->area_formacion_id = $dataPersona['area_formacion_id'] ?? null;
             $persona->institucion_id = $dataPersona['institucion_id'] ?? null;
-            $persona->con_respaldo = $dataPersona['con_respaldo'] ?? null;
+            //$persona->con_con_documentos = $dataPersona['con_con_documentos'] ?? null;
             $persona->nombres = $dataPersona['nombres'] ?? null;
             $persona->primer_apellido = $dataPersona['primer_apellido'] ?? null;
             $persona->segundo_apellido = $dataPersona['segundo_apellido'];
@@ -181,20 +181,20 @@ class IncorporacionesController extends Controller
         $incForm->cumple_exp_mando = $request->input('cumple_exp_mando');
         $incForm->cumple_con_formacion = $request->input('cumple_con_formacion');
 
-        if ($request->input('fecha_de_incorporacion')) {
-            $fechaIncFormated = Carbon::parse($request->input('fecha_de_incorporacion'))->setTimezone('UTC')->format('Y-m-d');
-            $incForm->fecha_de_incorporacion = $fechaIncFormated;
+        if ($request->input('fecha_incorporacion')) {
+            $fechaIncFormated = Carbon::parse($request->input('fecha_incorporacion'))->setTimezone('UTC')->format('Y-m-d');
+            $incForm->fecha_incorporacion = $fechaIncFormated;
         }
         $incForm->hp = $request->input('hp');
         $incForm->cite_nota_minuta = $request->input('cite_nota_minuta');
-        $incForm->codigo_nota_minuta = $request->input('codigo_nota_minuta');
+        $incForm->codigo_minuta = $request->input('codigo_minuta');
         if ($request->input('fecha_nota_minuta')) {
             $fecha_nota_minuta = Carbon::parse($request->input('fecha_nota_minuta'))->setTimezone('UTC')->format('Y-m-d');
             $incForm->fecha_nota_minuta = $fecha_nota_minuta;
         }
-        if ($request->input('fecha_recepcion')) {
-            $fecha_recepcion = Carbon::parse($request->input('fecha_recepcion'))->setTimezone('UTC')->format('Y-m-d');
-            $incForm->fecha_recepcion = $fecha_recepcion;
+        if ($request->input('fecha_recepcion_nota')) {
+            $fecha_recepcion_nota = Carbon::parse($request->input('fecha_recepcion_nota'))->setTimezone('UTC')->format('Y-m-d');
+            $incForm->fecha_recepcion_nota = $fecha_recepcion_nota;
         }
         $incForm->cite_informe = $request->input('cite_informe');
         if ($request->input('fecha_informe')) {
@@ -286,7 +286,7 @@ class IncorporacionesController extends Controller
         $templateProcessor->setValue('persona.formacion', isset($incorporacion->persona->areaFormacion) ? $incorporacion->persona->areaFormacion->nombre : '');
 
         if (!$incorporacion->puesto_actual->personaPuesto->isEmpty()) {
-            $fechaDesignacion = $incorporacion->puesto_actual->personaPuesto->first()->fecha_inicio;
+            $fechaDesignacion = $incorporacion->puesto_actual->personaPuesto->first()->fecha_inicio_puesto;
             $carbonFecha = Carbon::parse($fechaDesignacion);
             setlocale(LC_TIME, 'es_UY');
             $carbonFecha->locale('es_UY');
@@ -518,7 +518,7 @@ class IncorporacionesController extends Controller
         }
         $templateProcessor->setValue('ubicacion', $ubicacion);
 
-        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_de_incorporacion);
+        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_incorporacion);
         setlocale(LC_TIME, 'es_UY');
         $carbonFechaIncorporacion->locale('es_UY');
         $fechaIncorporacionFormateada = $carbonFechaIncorporacion->isoFormat('LL');
@@ -554,7 +554,7 @@ class IncorporacionesController extends Controller
 
         $templateProcessor->setValue('fechaMemo', $incorporacion->fecha_memorandum);
         $templateProcessor->setValue('incorporacion.fechaRAP', $incorporacion->fecha_rap);
-        $templateProcessor->setValue('incorporacion.fechaDeIncorporacion', $incorporacion->fecha_de_incorporacion);
+        $templateProcessor->setValue('incorporacion.fechaDeIncorporacion', $incorporacion->fecha_incorporacion);
 
         if (isset($incorporacion->puesto_actual)) {
             $fileName = 'R-1469-01-CambioItem_' . $incorporacion->persona->nombre_completo;
@@ -646,7 +646,7 @@ class IncorporacionesController extends Controller
         $templateProcessor->setValue('puesto_nuevo.salario', $incorporacion->puesto_nuevo->salario);
         $templateProcessor->setValue('puesto_nuevo.salarioLiteral', $incorporacion->puesto_nuevo->salario_literal);
 
-        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_de_incorporacion);
+        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_incorporacion);
         setlocale(LC_TIME, 'es_UY');
         $carbonFechaIncorporacion->locale('es_UY');
         $fechaIncorporacionFormateada = $carbonFechaIncorporacion->isoFormat('LL');
@@ -736,7 +736,7 @@ class IncorporacionesController extends Controller
         $templateProcessor->setValue('puesto_nuevo.salario', $incorporacion->puesto_nuevo->salario);
         $templateProcessor->setValue('puesto_nuevo.salarioLiteral', $incorporacion->puesto_nuevo->salario_literal);
 
-        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_de_incorporacion);
+        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_incorporacion);
         setlocale(LC_TIME, 'es_UY');
         $carbonFechaIncorporacion->locale('es_UY');
         $fechaIncorporacionFormateada = $carbonFechaIncorporacion->isoFormat('LL');
@@ -823,14 +823,14 @@ class IncorporacionesController extends Controller
         }
         $templateProcessor->setValue('ubicacion', $ubicacion);
 
-        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_de_incorporacion);
+        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_incorporacion);
         setlocale(LC_TIME, 'es_UY');
         $carbonFechaIncorporacion->locale('es_UY');
         $fechaIncorporacionFormateada = $carbonFechaIncorporacion->isoFormat('LL');
         $nombreDiaIncorporacion = $carbonFechaIncorporacion->isoFormat('dddd');
         $templateProcessor->setValue('incorporacion.nombreDiaDeIncorporacion', $nombreDiaIncorporacion);
 
-        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_de_incorporacion);
+        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_incorporacion);
         setlocale(LC_TIME, 'es_UY');
         $carbonFechaIncorporacion->locale('es_UY');
         $fechaIncorporacionFormateada = $carbonFechaIncorporacion->isoFormat('LL');
@@ -943,7 +943,7 @@ class IncorporacionesController extends Controller
         }
         $templateProcessor->setValue('ubicacion', $ubicacion);
 
-        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_de_incorporacion);
+        $carbonFechaIncorporacion = Carbon::parse($incorporacion->fecha_incorporacion);
         setlocale(LC_TIME, 'es_UY');
         $carbonFechaIncorporacion->locale('es_UY');
         $fechaIncorporacionFormateada = $carbonFechaIncorporacion->isoFormat('LL');
@@ -1063,7 +1063,7 @@ class IncorporacionesController extends Controller
         $fechaNotaMinutaFormateada = $carbonFechaNotaMinuta->isoFormat('LL');
         $templateProcessor->setValue('incorporacion.fechaNotaMinuta', $fechaNotaMinutaFormateada);
 
-        $carbonFechaRecepcion = Carbon::parse($incorporacion->fecha_recepcion);
+        $carbonFechaRecepcion = Carbon::parse($incorporacion->fecha_recepcion_nota);
         setlocale(LC_TIME, 'es_UY');
         $carbonFechaRecepcion->locale('es_UY');
         $fechaRecepcionFormateada = $carbonFechaRecepcion->isoFormat('LL');
@@ -1103,13 +1103,13 @@ class IncorporacionesController extends Controller
         $templateProcessor->setValue('persona.areaformacion', $incorporacion->persona->area_formacion->nombre ?? 'Valor predeterminado');
        $templateProcessor->setValue('persona.institucion', $incorporacion->persona->institucion->nombre ?? 'Valor predeterminado');
 
-        $carbonFechaConclusion = Carbon::parse($incorporacion->persona->anio_conclusion);
+        $carbonFechaConclusion = Carbon::parse($incorporacion->persona->anio_conclusion_estudios);
         setlocale(LC_TIME, 'es_UY');
         $carbonFechaConclusion->locale('es_UY');
         $fechaConclusionFormateada = $carbonFechaConclusion->isoFormat('LL');
         $templateProcessor->setValue('persona.conclusion', $fechaConclusionFormateada);
 
-        $templateProcessor->setValue('incorporacion.respaldoFormacion', $this->obtenerTextoSegunValorDeFormacion($incorporacion->respaldo_formacion));
+        $templateProcessor->setValue('incorporacion.respaldoFormacion', $this->obtenerTextoSegunValorDeFormacion($incorporacion->respaldo_documentos));
 
         if ($incorporacion) {
             $puestoNuevo = $incorporacion->puesto_nuevo;
@@ -1181,7 +1181,7 @@ class IncorporacionesController extends Controller
         $templateProcessor = new TemplateProcessor($pathTemplate);
 
         $templateProcessor->setValue('incorporacion.citeInforme', $incorporacion->cite_informe);
-        $templateProcessor->setValue('incorporacion.codigoNotaMinuta', $incorporacion->codigo_nota_minuta);
+        $templateProcessor->setValue('incorporacion.codigoNotaMinuta', $incorporacion->codigo_minuta);
 
         //falta el responsable y su profesion
 
@@ -1256,7 +1256,7 @@ class IncorporacionesController extends Controller
         $templateProcessor->setValue('incorporacion.fechaInfo', $fechaInfoFormateada);
 
         $templateProcessor->setValue('incorporacion.hp', $incorporacion->hp);
-        $templateProcessor->setValue('incorporacion.codigoNotaMinuta', $incorporacion->codigo_nota_minuta);
+        $templateProcessor->setValue('incorporacion.codigoNotaMinuta', $incorporacion->codigo_minuta);
         $templateProcessor->setValue('incorporacion.citeInfNotaMinuta', $incorporacion->cite_nota_minuta);
 
         $carbonFechaNotaMinuta = Carbon::parse($incorporacion->fecha_nota_minuta);
@@ -1265,7 +1265,7 @@ class IncorporacionesController extends Controller
         $fechaNotaMinutaFormateada = $carbonFechaNotaMinuta->isoFormat('LL');
         $templateProcessor->setValue('incorporacion.fechaNotaMinuta', $fechaNotaMinutaFormateada);
 
-        $carbonFechaRecepcion = Carbon::parse($incorporacion->fecha_recepcion);
+        $carbonFechaRecepcion = Carbon::parse($incorporacion->fecha_recepcion_nota);
         setlocale(LC_TIME, 'es_UY');
         $carbonFechaRecepcion->locale('es_UY');
         $fechaRecepcionFormateada = $carbonFechaRecepcion->isoFormat('LL');
@@ -1299,13 +1299,13 @@ class IncorporacionesController extends Controller
         $templateProcessor->setValue('persona.areaformacion', $incorporacion->persona->area_formacion->nombre ?? 'Valor predeterminado');
         $templateProcessor->setValue('persona.institucion', $incorporacion->persona->institucion->nombre ?? 'Valor predeterminado');
 
-        $carbonFechaConclusion = Carbon::parse($incorporacion->persona->anio_conclusion);
+        $carbonFechaConclusion = Carbon::parse($incorporacion->persona->anio_conclusion_estudios);
         setlocale(LC_TIME, 'es_UY');
         $carbonFechaConclusion->locale('es_UY');
         $fechaConclusionFormateada = $carbonFechaConclusion->isoFormat('LL');
         $templateProcessor->setValue('persona.conclusion', $fechaConclusionFormateada);
 
-        $templateProcessor->setValue('incorporacion.respaldoFormacion', $this->obtenerTextoSegunValorDeFormacion($incorporacion->respaldo_formacion));
+        $templateProcessor->setValue('incorporacion.respaldoFormacion', $this->obtenerTextoSegunValorDeFormacion($incorporacion->respaldo_documentos));
 
         if ($incorporacion) {
             $puestoNuevo = $incorporacion->puesto_nuevo;
@@ -1749,9 +1749,9 @@ class IncorporacionesController extends Controller
         $dataPersona = $request->input('persona');
         $persona = Persona::find($dataPersona['id']);
         if ($persona) {
-            if ($dataPersona['anio_conclusion']) {
-                $anioConclusion = Carbon::parse($dataPersona['anio_conclusion'])->setTimezone('UTC')->format('Y-m-d');
-                $persona->anio_conclusion = $anioConclusion;
+            if ($dataPersona['anio_conclusion_estudios']) {
+                $anioConclusion = Carbon::parse($dataPersona['anio_conclusion_estudios'])->setTimezone('UTC')->format('Y-m-d');
+                $persona->anio_conclusion_estudios = $anioConclusion;
             }
             if ($dataPersona['fecha_nacimiento']) {
                 $fechaNacFormated = Carbon::parse($dataPersona['fecha_nacimiento'])->setTimezone('UTC')->format('Y-m-d');
@@ -1760,7 +1760,7 @@ class IncorporacionesController extends Controller
             $persona->grado_academico_id = $dataPersona['grado_academico_id'] ?? null;
             $persona->area_formacion_id = $dataPersona['area_formacion_id'] ?? null;
             $persona->institucion_id = $dataPersona['institucion_id'] ?? null;
-            $persona->con_respaldo = $dataPersona['con_respaldo'] ?? null;
+           // $persona->con_con_documentos = $dataPersona['con_con_documentos'] ?? null;
             $persona->nombres = $dataPersona['nombres'] ?? null;
             $persona->primer_apellido = $dataPersona['primer_apellido'] ?? null;
             $persona->segundo_apellido = $dataPersona['segundo_apellido'];
@@ -1777,20 +1777,20 @@ class IncorporacionesController extends Controller
         $incorporacionForm->cumple_exp_mando = $request->input('cumple_exp_mando');
         $incorporacionForm->cumple_con_formacion = $request->input('cumple_con_formacion');
 
-        if ($request->input('fecha_de_incorporacion')) {
-            $fechaIncFormated = Carbon::parse($request->input('fecha_de_incorporacion'))->setTimezone('UTC')->format('Y-m-d');
-            $incorporacionForm->fecha_de_incorporacion = $fechaIncFormated;
+        if ($request->input('fecha_incorporacion')) {
+            $fechaIncFormated = Carbon::parse($request->input('fecha_incorporacion'))->setTimezone('UTC')->format('Y-m-d');
+            $incorporacionForm->fecha_incorporacion = $fechaIncFormated;
         }
         $incorporacionForm->hp = $request->input('hp');
         $incorporacionForm->cite_nota_minuta = $request->input('cite_nota_minuta');
-        $incorporacionForm->codigo_nota_minuta = $request->input('codigo_nota_minuta');
+        $incorporacionForm->codigo_minuta = $request->input('codigo_minuta');
         if ($request->input('fecha_nota_minuta')) {
             $fecha_nota_minuta = Carbon::parse($request->input('fecha_nota_minuta'))->setTimezone('UTC')->format('Y-m-d');
             $incorporacionForm->fecha_nota_minuta = $fecha_nota_minuta;
         }
-        if ($request->input('fecha_recepcion')) {
-            $fecha_recepcion = Carbon::parse($request->input('fecha_recepcion'))->setTimezone('UTC')->format('Y-m-d');
-            $incorporacionForm->fecha_recepcion = $fecha_recepcion;
+        if ($request->input('fecha_recepcion_nota')) {
+            $fecha_recepcion_nota = Carbon::parse($request->input('fecha_recepcion_nota'))->setTimezone('UTC')->format('Y-m-d');
+            $incorporacionForm->fecha_recepcion_nota = $fecha_recepcion_nota;
         }
         $incorporacionForm->cite_informe = $request->input('cite_informe');
         if ($request->input('fecha_informe')) {

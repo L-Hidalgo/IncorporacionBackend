@@ -12,12 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vista_auditoria', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('logs_acciones_usuarios', function (Blueprint $table) {
+            $table->id();
             $table->string('nombre_vista')->nullable();
             $table->string('accion')->nullable();
-            $table->string('usuario')->nullable();
             $table->timestamp('fecha_hora')->default(DB::raw('CURRENT_TIMESTAMP'));
+            //$table->foreignId('usuario_id')->nullable()->constrained('');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vista__auditoria');
+        Schema::dropIfExists('logs_acciones_usuarios');
     }
 };

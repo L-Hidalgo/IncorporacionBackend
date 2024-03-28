@@ -24,7 +24,7 @@ class PersonaPuestoController extends Controller
             ->join('departamentos', 'puestos.departamento_id', '=', 'departamentos.id')
             ->join('gerencias', 'departamentos.gerencia_id', '=', 'gerencias.id')
             ->leftJoin('requisitos', 'puestos.id', '=', 'requisitos.puesto_id')
-            ->leftJoin('personas_puestos', 'puestos.id', '=', 'personas_puestos.puesto_id')
+            ->leftJoin('funcionarios', 'puestos.id', '=', 'funcionarios.puesto_id')
             ->leftJoin('personas', 'personas.id', '=', 'puestos.persona_actual_id');
 
         if (isset($item)) {
@@ -47,7 +47,7 @@ class PersonaPuestoController extends Controller
             'personas.formacion',
             'personas.fecha_nacimiento',
             'personas.fecha_inicion_sin',
-            'personas_puestos.fecha_inicio as fecha_inicio',
+            'funcionarios.fecha_inicio_puesto as fecha_inicio_puesto',
             'personas.imagen',
             'puestos.id',
             'puestos.item',

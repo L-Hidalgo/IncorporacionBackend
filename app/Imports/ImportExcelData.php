@@ -120,8 +120,8 @@ class ImportExcelData implements ToModel, WithStartRow
         $segundoApellido, // 11
         $nombres,         // 12
         $nombreCompleto,  // 12 + 10 + 11
-        $formacion,       // 15
-        $sexo,            // 16
+        $ocupacion,       // 15
+        $genero,            // 16
         $fechaNacimiento, // 17
         $telefono,        // 19
         $fechaInicioEnSin,// 20
@@ -143,8 +143,8 @@ class ImportExcelData implements ToModel, WithStartRow
                 'segundo_apellido' => $segundoApellido,
                 'nombres' => $nombres,
                 'nombre_completo' => $nombreCompleto,
-                'formacion' => $formacion,
-                'sexo' => $sexo,
+                'ocupacion' => $ocupacion,
+                'genero' => $genero,
                 'fecha_nacimiento' => $fechaNacimiento,
                 'telefono' => $telefono,
                 'fecha_inicion_sin' => $fechaInicioEnSin
@@ -155,10 +155,10 @@ class ImportExcelData implements ToModel, WithStartRow
 
     public function migrarPersonaPuesto(
         $estadoFormacion,
-        $fechaInicio,
+        $fechaInicioPuesto,
         $personalAntiguoEnElCargo,
         $motivoBaja,
-        $fechaFin,
+        $fechaFinPuesto,
         $puestoId,
         $personaId,
     ): PersonaPuesto
@@ -178,20 +178,20 @@ class ImportExcelData implements ToModel, WithStartRow
             ->first();
 
         if (!isset($personaPuesto)) {
-            $timestampFechaInicio = $this->convertirFechaATimestamp($fechaInicio);
-            $fechaInicio = Carbon::createFromTimestamp($timestampFechaInicio)->format('Y-m-d');
+            $timestampFechaInicioPuesto = $this->convertirFechaATimestamp($fechaInicioPuesto);
+            $fechaInicioPuesto = Carbon::createFromTimestamp($timestampFechaInicioPuesto)->format('Y-m-d');
 
-            $timestampFechaFin = $this->convertirFechaATimestamp($fechaFin);
-            $fechaFin = Carbon::createFromTimestamp($timestampFechaFin)->format('Y-m-d');
+            $timestampfechaFinPuesto = $this->convertirFechaATimestamp($fechaFinPuesto);
+            $fechaFinPuesto = Carbon::createFromTimestamp($timestampfechaFinPuesto)->format('Y-m-d');
 
             $personaPuesto = PersonaPuesto::create([
                 'estado_formacion' => $estadoFormacion,
                 'file_ac' => $fileAc,
-                'fecha_inicio' => $fechaInicio,
+                'fecha_inicio_puesto' => $fechaInicioPuesto,
                 'personal_antiguo_en_el_cargo' => $personalAntiguoEnElCargo,
                 'motivo_baja' => $motivoBaja,
                 'estado' => 1,
-                'fecha_fin' => $fechaFin,
+                'fecha_fin_puesto' => $fechaFinPuesto,
                 'puesto_id' => $puesto->id,
                 'persona_id' => $persona->id,
             ]);

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ImportLog extends Model
 {
-    protected $table = 'import_logs';
+    protected $table = 'import_logs_acciones_usuarios';
 
     protected $fillable = [
         'id',

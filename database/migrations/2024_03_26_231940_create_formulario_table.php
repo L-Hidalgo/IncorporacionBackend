@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('formulario', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('puesto_nuevo_id');
-
+            $table->unsignedBigInteger('persona_id');
             $table->string('tipo_form')->nullable();
             $table->string('resultado_factora')->nullable();
             $table->string('poai_nivel')->nullable();
@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('poai_nombrejefe')->nullable();
             $table->string('poai_motivoac')->nullable();
             $table->string('poai_gerenciacomision')->nullable();
-
             $table->foreign('persona_id')->references('id')->on('personas');
             $table->foreign('puesto_nuevo_id')->references('id')->on('puestos');
             $table->timestamps();
