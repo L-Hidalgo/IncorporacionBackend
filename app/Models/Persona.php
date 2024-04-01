@@ -9,7 +9,7 @@ class Persona extends Model
 {
     use HasFactory;
 
-    protected $table = 'personas';
+    protected $table = 'dde_personas';
 
     protected $fillable = [
         'id',
@@ -47,7 +47,7 @@ class Persona extends Model
         return $this->hasMany(Incorporacion::class);
     }
 
-    public function puestos_actuales()
+    public function dde_puestos_actuales()
     {
         return $this->hasMany(Puesto::class, 'persona_actual_id', 'id');
     }

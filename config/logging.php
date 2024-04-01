@@ -13,7 +13,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This option defines the default log channel that is utilized to write
-    | messages to your logs_acciones_usuarios. The value provided here should match one of
+    | messages to your dde_logs_acciones_usuarios. The value provided here should match one of
     | the channels present in the list of "channels" configured below.
     |
     */
@@ -60,14 +60,14 @@ return [
 
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs_acciones_usuarios/laravel.log'),
+            'path' => storage_path('dde_logs_acciones_usuarios/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs_acciones_usuarios/laravel.log'),
+            'path' => storage_path('dde_logs_acciones_usuarios/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
@@ -124,7 +124,7 @@ return [
         ],
 
         'emergency' => [
-            'path' => storage_path('logs_acciones_usuarios/laravel.log'),
+            'path' => storage_path('dde_logs_acciones_usuarios/laravel.log'),
         ],
 
     ],

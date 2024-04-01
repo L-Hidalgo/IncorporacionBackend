@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ImportarImagesController;
-use App\Http\Controllers\IncorporacionesController;
+use App\Http\Controllers\dde_incorporacionesController;
 use App\Models\Gerencia;
 
 Route::get('/', function () {
@@ -13,12 +13,12 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
   Route::get('/imagen-persona/{personaId}', [ImportarImagesController::class, 'getImagenPersona'])->name('imagen-persona');
-  Route::get('/download-form/{fileName}', [IncorporacionesController::class, 'downloadEvalForm'])->name('download.form')->middleware('auth');
+  Route::get('/download-form/{fileName}', [dde_incorporacionesController::class, 'downloadEvalForm'])->name('download.form')->middleware('auth');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/migraciones', function () {
   return Inertia::render('Migraciones/Index', [
-    'gerencias' => Gerencia::select('id', 'nombre')->get()->map(function ($gerencia) {
+    'dde_gerencias' => Gerencia::select('id', 'nombre')->get()->map(function ($gerencia) {
       return [
         'key' => 'g-' . $gerencia->id,
         'icon' => 'pi pi-building',
@@ -35,10 +35,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/migraciones', function ()
   ]);
 })->name('migraciones');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/incorporaciones', function () {
-  return Inertia::render('Incorporaciones/Index');
-})->name('incorporaciones');
+Route::middleware(['auth:sanctum', 'verified'])->get('/dde_incorporaciones', function () {
+  return Inertia::render('dde_incorporaciones/Index');
+})->name('dde_incorporaciones');
 
-// Route::middleware(['auth:sanctum', 'verified'])->get('/incorporaciones1', function () {
-//   return Inertia::render('Incorporaciones1/Index');
-// })->name('incorporaciones1');
+// Route::middleware(['auth:sanctum', 'verified'])->get('/dde_incorporaciones1', function () {
+//   return Inertia::render('dde_incorporaciones1/Index');
+// })->name('dde_incorporaciones1');

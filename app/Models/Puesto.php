@@ -23,7 +23,7 @@ class Puesto extends Model
         return $this->hasMany(PersonaPuesto::class, 'puesto_id', 'id');
     }
 
-    public function requisitos()
+    public function dde_requisitos()
     {
         return $this->hasMany(Requisito::class);
     }

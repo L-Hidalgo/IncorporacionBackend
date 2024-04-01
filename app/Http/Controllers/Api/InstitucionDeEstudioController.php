@@ -10,8 +10,8 @@ class InstitucionDeEstudioController extends Controller
 {
     public function listar()
     {
-        $InstitucionesDeEstudio = Institucion::select(['id', 'nombre'])->get();
-        return $this->sendSuccess($InstitucionesDeEstudio);
+        $dde_institucionesDeEstudio = Institucion::select(['id', 'nombre'])->get();
+        return $this->sendSuccess($dde_institucionesDeEstudio);
     }
 
     public function crear(Request $request)

@@ -55,7 +55,7 @@ class ImportExcelData implements ToModel, WithStartRow
         }
         // $procesoDeIncorporacion = $this->migrarProcesoDeIncorporacion($row[21], $row[22], $row[23], $row[24], $row[25], $row[26], $row[27], $row[28], $row[29], $row[30], $row[31], $row[32], $row[33], $row[34], $row[35], $row[36], $row[37], $row[38], $puesto->id);
 
-        $requisitos = $this->migrarRequisito($puesto->id, $row[43], $row[44], $row[45], $row[46]);
+        $dde_requisitos = $this->migrarRequisito($puesto->id, $row[43], $row[44], $row[45], $row[46]);
     }
 
     public function migrateGerencia($abreviatura,$nombre): Gerencia
@@ -199,9 +199,9 @@ class ImportExcelData implements ToModel, WithStartRow
         return $personaPuesto;
     }
 
-    // public function migrarProcesoDeIncorporacion($propuestos, $estado, $remitente, $fechaAccion, $responsable, $informeCuadro, $fechaInformeCuadro, $hpHr, $sippase, $idioma, $fechaMovimiento, $tipoMovimiento, $itemOrigen, $cargoOrigen, $memorandum, $ra, $fechaMermorialRap, $sayri, $puestoId): ProcesoDeIncorporacion
+    // public function migrarProcesoDeIncorporacion($prodde_puestos, $estado, $remitente, $fechaAccion, $responsable, $informeCuadro, $fechaInformeCuadro, $hpHr, $sippase, $idioma, $fechaMovimiento, $tipoMovimiento, $itemOrigen, $cargoOrigen, $memorandum, $ra, $fechaMermorialRap, $sayri, $puestoId): ProcesoDeIncorporacion
     // {
-    //     $procesoDeIncorporacion = ProcesoDeIncorporacion::where('propuestos', $propuestos)->where('puesto_id', $puestoId)->first();
+    //     $procesoDeIncorporacion = ProcesoDeIncorporacion::where('prodde_puestos', $prodde_puestos)->where('puesto_id', $puestoId)->first();
 
     //     if (!isset($procesoDeIncorporacion)) {
     //         if (!empty($fechaAccion)) {
@@ -225,7 +225,7 @@ class ImportExcelData implements ToModel, WithStartRow
     //         }
 
     //         $procesoDeIncorporacion = ProcesoDeIncorporacion::create([
-    //             'propuestos' => $propuestos,
+    //             'prodde_puestos' => $prodde_puestos,
     //             'estado' => $estado,
     //             'remitente' => $remitente,
     //             'fechaAccion' => $fechaAccion,
@@ -252,9 +252,9 @@ class ImportExcelData implements ToModel, WithStartRow
 
     public function migrarRequisito($puesto_id, $formacionRequerida, $experienciaProfesionalSegunCargo, $experienciaRelacionadoAlArea, $experienciaEnFuncionesDeMando): Requisito
     {
-        $requisitos = Requisito::where('puesto_id', $puesto_id)->first();
-        if (!isset($requisitos)) {
-            $requisitos = Requisito::create([
+        $dde_requisitos = Requisito::where('puesto_id', $puesto_id)->first();
+        if (!isset($dde_requisitos)) {
+            $dde_requisitos = Requisito::create([
                 'puesto_id' => $puesto_id,
                 'formacion_requerida' => $formacionRequerida,
                 'experiencia_profesional_segun_cargo' => $experienciaProfesionalSegunCargo,
@@ -262,7 +262,7 @@ class ImportExcelData implements ToModel, WithStartRow
                 'experiencia_en_funciones_de_mando' => $experienciaEnFuncionesDeMando
             ]);
         }
-        return $requisitos;
+        return $dde_requisitos;
     }
 
     private function convertirFechaATimestamp($fecha)

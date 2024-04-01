@@ -16,7 +16,7 @@ class ImportarImagesController extends Controller
             if ($request->hasFile('file')) {
                 $archivo = $request->file('file');
                 $nombreArchivo = $archivo->getClientOriginalName();
-                $directorioDestino = public_path('imagenes_personas');
+                $directorioDestino = public_path('imagenes_dde_personas');
 
                 $archivo->move($directorioDestino, $nombreArchivo);
 
@@ -32,7 +32,7 @@ class ImportarImagesController extends Controller
                             $persona = Persona::where('ci', $ci)->first();
                             if ($persona) {
                                 $nombreImagen = $ci . '.' . $extension;
-                                $zip->extractTo(Storage::disk('img_personas')->path('/'), $nombreArchivo);
+                                $zip->extractTo(Storage::disk('img_dde_personas')->path('/'), $nombreArchivo);
                                 $persona->imagen = $nombreImagen;
                                 $persona->save();
                             }
@@ -57,7 +57,7 @@ class ImportarImagesController extends Controller
     {
         $persona = Persona::where('id', $personaId)->first();
         if (isset($persona)) {
-            $disk = Storage::disk('img_personas');
+            $disk = Storage::disk('img_dde_personas');
             $content = $disk->get($persona->imagen);
             $mime = File::mimeType($disk->path($persona->imagen));
             return response($content)->header('Content-Type', $mime);

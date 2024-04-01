@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Institucion extends Model
 {
-    protected $table = "instituciones";
+    protected $table = "dde_instituciones";
 
     protected $fillable = [
         'id',
         'nombre',
     ];
 
-    public function personas()
+    public function dde_personas()
     {
         return $this->hasMany(Persona::class);
     }

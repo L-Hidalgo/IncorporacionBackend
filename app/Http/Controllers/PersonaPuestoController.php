@@ -15,67 +15,67 @@ class PersonaPuestoController extends Controller
 
         // Filtros
         $item = $request->input('item');
-        $gerenciasIds = $request->input('gerenciasIds');
-        $departamentosIds = $request->input('departamentosIds');
+        $dde_gerenciasIds = $request->input('dde_gerenciasIds');
+        $dde_departamentosIds = $request->input('dde_departamentosIds');
         $estado = $request->input('estado');
         $tipoMovimiento = $request->input('tipoMovimiento');
 
-        $query = DB::table('puestos')
-            ->join('departamentos', 'puestos.departamento_id', '=', 'departamentos.id')
-            ->join('gerencias', 'departamentos.gerencia_id', '=', 'gerencias.id')
-            ->leftJoin('requisitos', 'puestos.id', '=', 'requisitos.puesto_id')
-            ->leftJoin('funcionarios', 'puestos.id', '=', 'funcionarios.puesto_id')
-            ->leftJoin('personas', 'personas.id', '=', 'puestos.persona_actual_id');
+        $query = DB::table('dde_puestos')
+            ->join('dde_departamentos', 'dde_puestos.departamento_id', '=', 'dde_departamentos.id')
+            ->join('dde_gerencias', 'dde_departamentos.gerencia_id', '=', 'dde_gerencias.id')
+            ->leftJoin('dde_requisitos', 'dde_puestos.id', '=', 'dde_requisitos.puesto_id')
+            ->leftJoin('dde_funcionarios', 'dde_puestos.id', '=', 'dde_funcionarios.puesto_id')
+            ->leftJoin('dde_personas', 'dde_personas.id', '=', 'dde_puestos.persona_actual_id');
 
         if (isset($item)) {
-            $query = $query->where('puestos.item', $item);
+            $query = $query->where('dde_puestos.item', $item);
         }
-        if (isset($departamentosIds) && count($departamentosIds) > 0) {
-            $query = $query->whereIn('departamentos.id', $departamentosIds);
+        if (isset($dde_departamentosIds) && count($dde_departamentosIds) > 0) {
+            $query = $query->whereIn('dde_departamentos.id', $dde_departamentosIds);
         }
-        if (isset($gerenciasIds) && count($gerenciasIds) > 0) {
-            $query = $query->whereIn('departamentos.gerencia_id', $gerenciasIds);
+        if (isset($dde_gerenciasIds) && count($dde_gerenciasIds) > 0) {
+            $query = $query->whereIn('dde_departamentos.gerencia_id', $dde_gerenciasIds);
         }
         if (isset($estado)) {
-            $query = $query->where('puestos.estado', $estado);
+            $query = $query->where('dde_puestos.estado', $estado);
         }
 
         $query = $query->select([
-            'personas.ci',
-            'personas.exp',
-            'personas.nombre_completo',
-            'personas.formacion',
-            'personas.fecha_nacimiento',
-            'personas.fecha_inicion_sin',
-            'funcionarios.fecha_inicio_puesto as fecha_inicio_puesto',
-            'personas.imagen',
-            'puestos.id',
-            'puestos.item',
-            'puestos.denominacion',
-            'puestos.estado',
-            'puestos.salario',
-            'gerencias.nombre as gerencia',
-            'departamentos.nombre as departamento',
-            'puestos.objetivo',
-            'requisitos.formacion_requerida as formacion_requerida',
-            'requisitos.experiencia_profesional_segun_cargo as experiencia_profesional_segun_cargo',
-            'requisitos.experiencia_relacionado_al_area as experiencia_relacionado_al_area',
-            'requisitos.experiencia_en_funciones_de_mando as experiencia_en_funciones_de_mando',
-            'puestos.persona_actual_id'
+            'dde_personas.ci',
+            'dde_personas.exp',
+            'dde_personas.nombre_completo',
+            'dde_personas.formacion',
+            'dde_personas.fecha_nacimiento',
+            'dde_personas.fecha_inicion_sin',
+            'dde_funcionarios.fecha_inicio_puesto as fecha_inicio_puesto',
+            'dde_personas.imagen',
+            'dde_puestos.id',
+            'dde_puestos.item',
+            'dde_puestos.denominacion',
+            'dde_puestos.estado',
+            'dde_puestos.salario',
+            'dde_gerencias.nombre as gerencia',
+            'dde_departamentos.nombre as departamento',
+            'dde_puestos.objetivo',
+            'dde_requisitos.formacion_requerida as formacion_requerida',
+            'dde_requisitos.experiencia_profesional_segun_cargo as experiencia_profesional_segun_cargo',
+            'dde_requisitos.experiencia_relacionado_al_area as experiencia_relacionado_al_area',
+            'dde_requisitos.experiencia_en_funciones_de_mando as experiencia_en_funciones_de_mando',
+            'dde_puestos.persona_actual_id'
         ]);
 
-        $query = $query->orderBy('puestos.item');
+        $query = $query->orderBy('dde_puestos.item');
 
         // paginacion
-        $personaPuestos = $query->paginate($limit, ['*'], 'page', $page);
+        $personadde_puestos = $query->paginate($limit, ['*'], 'page', $page);
 
-        return response()->json($personaPuestos);
+        return response()->json($personadde_puestos);
     }
 
 
     public function obtenerInfoDePersonapuesto($puestoId)
     {
-        $personaPuesto = Puesto::with(['persona_actual', 'departamento.gerencia', 'requisitos', 'personaPuesto'])->find($puestoId);
+        $personaPuesto = Puesto::with(['persona_actual', 'departamento.gerencia', 'dde_requisitos', 'personaPuesto'])->find($puestoId);
 
         return response()->json($personaPuesto);
     }
@@ -83,11 +83,11 @@ class PersonaPuestoController extends Controller
     public function filtrarAutoComplete(Request $request)
     {
         $keyword = $request->input('keyword', '');
-        $result = DB::table('puestos')
-            ->leftJoin('personas', 'personas.id', '=', 'puestos.persona_actual_id')
-            ->orWhere(DB::raw('CAST(puestos.item AS CHAR)'), 'LIKE', $keyword . "%")
-            ->orWhere('personas.nombre_completo', 'LIKE', $keyword . "%")
-            ->select(['puestos.item as item', 'personas.nombre_completo as nombre_completo'])
+        $result = DB::table('dde_puestos')
+            ->leftJoin('dde_personas', 'dde_personas.id', '=', 'dde_puestos.persona_actual_id')
+            ->orWhere(DB::raw('CAST(dde_puestos.item AS CHAR)'), 'LIKE', $keyword . "%")
+            ->orWhere('dde_personas.nombre_completo', 'LIKE', $keyword . "%")
+            ->select(['dde_puestos.item as item', 'dde_personas.nombre_completo as nombre_completo'])
             ->limit(6)->get();
         $results = [];
         if (ctype_digit($keyword)) {

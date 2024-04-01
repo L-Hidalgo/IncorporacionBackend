@@ -4,16 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInstitucionesTable extends Migration {
-    public function up()
+return new class extends Migration {
+    public function up(): void
     {
-        Schema::create('instituciones', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre');
+        Schema::create('dde_instituciones', function (Blueprint $table) {
+            $table->integer('id_inst')->unsigned()->autoIncrement();
+            $table->string('nombre_inst', 60);
             $table->timestamps();
+            $table->timestamp('fecha_inicio')->nullable()->default(null);
+            $table->timestamp('fecha_fin')->nullable()->default(null);
         });
 
-        DB::table('instituciones')->insert([
+        /*DB::table('dde_instituciones')->insert([
             ['nombre' => 'Instituto Técnico Boliviano Japonés (INBOLJAP)'],
             ['nombre' => 'Instituto Técnico Boliviano Suizo (TBS)'],
             ['nombre' => 'Instituto Técnico Nacional de Comercio (INCOS)'],
@@ -51,11 +53,11 @@ class CreateInstitucionesTable extends Migration {
             ['nombre' => 'Univ. Salesiana de Bolivia (USALESIANA) '],
             ['nombre' => 'Universidad Técnica de Oruro (UTO)'],
             ['nombre' => 'Universidad Tecnológica Boliviana (UTB)'],
-        ]);
+        ]);*/
     }
 
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('instituciones');
+        Schema::dropIfExists('dde_instituciones');
     }
 };

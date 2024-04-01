@@ -1904,7 +1904,7 @@
                     "homepage": "https://seld.be"
                 }
             ],
-            "description": "Sends your logs_acciones_usuarios to files, sockets, inboxes, databases and various web services",
+            "description": "Sends your dde_logs_acciones_usuarios to files, sockets, inboxes, databases and various web services",
             "homepage": "https://github.com/Seldaek/monolog",
             "keywords": [
                 "log",

@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class AreaDeFormacion extends Model
 {
-    protected $table = 'area_de_formaciones';
+    protected $table = 'dde_area_formaciones';
 
     protected $fillable = [
         'id',
         'nombre',
     ];
 
-    public function personas()
+    public function dde_personas()
     {
         return $this->hasMany(Persona::class);
     }

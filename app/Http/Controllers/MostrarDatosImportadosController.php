@@ -7,7 +7,7 @@ class PersonaController extends Controller
 {
     public function mostrarDatosEnTabla()
     {
-        $personas = Persona::with('puestoPersona.puesto')->get();
-        return view('tu_vista', compact('personas'));
+        $dde_personas = Persona::with('puestoPersona.puesto')->get();
+        return view('tu_vista', compact('dde_personas'));
     }
 }

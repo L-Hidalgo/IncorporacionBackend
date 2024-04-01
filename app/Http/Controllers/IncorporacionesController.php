@@ -15,10 +15,10 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class IncorporacionesController extends Controller
+class dde_incorporacionesController extends Controller
 {
 
-    public function listarIncorporaciones(Request $request)
+    public function listardde_incorporaciones(Request $request)
     {
         $limit = $request->input('limit', 10);
         $page = $request->input('page', 1);
@@ -26,8 +26,8 @@ class IncorporacionesController extends Controller
         //Mostrar datos o listar datos
         $paso = $request->input('paso');
         $personaId = $request->input('personaId');
-        $gerenciasIds = $request->input('gerenciasIds');
-        $departamentosIds = $request->input('departamentosIds');
+        $dde_gerenciasIds = $request->input('dde_gerenciasIds');
+        $dde_departamentosIds = $request->input('dde_departamentosIds');
         $estado = $request->input('estado');
 
         $query = Incorporacion::with([
@@ -37,7 +37,7 @@ class IncorporacionesController extends Controller
             'puesto_nuevo.departamento.gerencia',
             'puesto_nuevo.persona_actual',
             'puesto_nuevo.personaPuesto.persona',
-            'puesto_nuevo.requisitos'
+            'puesto_nuevo.dde_requisitos'
         ]);
 
         if (isset($personaId)) {
@@ -46,34 +46,34 @@ class IncorporacionesController extends Controller
         if (isset($paso)) {
             $query = $query->where('paso', $paso);
         }
-        if (isset($departamentosIds) && count($departamentosIds) > 0) {
-            $query = $query->whereIn('departamentos.id', $departamentosIds);
+        if (isset($dde_departamentosIds) && count($dde_departamentosIds) > 0) {
+            $query = $query->whereIn('dde_departamentos.id', $dde_departamentosIds);
         }
-        if (isset($gerenciasIds) && count($gerenciasIds) > 0) {
-            $query = $query->whereIn('departamentos.gerencia_id', $gerenciasIds);
+        if (isset($dde_gerenciasIds) && count($dde_gerenciasIds) > 0) {
+            $query = $query->whereIn('dde_departamentos.gerencia_id', $dde_gerenciasIds);
         }
         if (isset($estado)) {
-            $query = $query->where('puestos.estado', $estado);
+            $query = $query->where('dde_puestos.estado', $estado);
         }
 
         // $query = $query->whereNotNull('puesto_actual_id')->whereNotNull('puesto_nuevo_id');
 
         $query->orderBy('created_at', 'desc');
 
-        // Paginacion de incorporaciones
-        $incorporaciones = $query->paginate($limit, ['*'], 'page', $page);
+        // Paginacion de dde_incorporaciones
+        $dde_incorporaciones = $query->paginate($limit, ['*'], 'page', $page);
 
-        return response()->json($incorporaciones);
+        return response()->json($dde_incorporaciones);
     }
 
     public function filtrarAutoComplete(Request $request)
     {
         $keyword = $request->input('keyword', '');
         $result = DB::table('incorporacion_formularios')
-            ->leftJoin('personas', 'incorporacion_formularios.persona_id', '=', 'personas.id')
-            ->orWhere('personas.nombreCompleto', 'LIKE', $keyword . "%")
-            ->orWhere('personas.ci', 'LIKE', $keyword . "%")
-            ->select(['personas.id as idPersona', 'personas.nombreCompleto as nombreCompleto', 'personas.ci as ci'])
+            ->leftJoin('dde_personas', 'incorporacion_formularios.persona_id', '=', 'dde_personas.id')
+            ->orWhere('dde_personas.nombreCompleto', 'LIKE', $keyword . "%")
+            ->orWhere('dde_personas.ci', 'LIKE', $keyword . "%")
+            ->select(['dde_personas.id as idPersona', 'dde_personas.nombreCompleto as nombreCompleto', 'dde_personas.ci as ci'])
             ->limit(6)->get();
         $results = [];
         if (ctype_digit($keyword)) {
@@ -240,8 +240,8 @@ class IncorporacionesController extends Controller
     {
         $puestoActual = $request->input('puesto_actual', '');
 
-        $persona = Persona::with('puestos_actuales.departamento.gerencia')
-            ->whereHas('puestos_actuales', function ($query) use ($puestoActual) {
+        $persona = Persona::with('dde_puestos_actuales.departamento.gerencia')
+            ->whereHas('dde_puestos_actuales', function ($query) use ($puestoActual) {
                 $query->where('item', $puestoActual);
             })
             ->orWhere('ci', $puestoActual)
@@ -256,7 +256,7 @@ class IncorporacionesController extends Controller
     //Buscar por Item Nuevo
     public function buscarItemApi($item)
     {
-        $puesto = Puesto::with(['persona_actual', 'requisitos_puesto.requisito', 'departamento.gerencia'])->where('item', $item)->first();
+        $puesto = Puesto::with(['persona_actual', 'dde_requisitos_puesto.requisito', 'departamento.gerencia'])->where('item', $item)->first();
         if (isset($puesto)) {
             $puesto->persona_actual;
             return response()->json($puesto);
@@ -306,7 +306,7 @@ class IncorporacionesController extends Controller
         $templateProcessor->setValue('puesto_nuevo.denominacion', $incorporacion->puesto_nuevo->denominacion);
         $templateProcessor->setValue('puesto_nuevo.salario', $incorporacion->puesto_nuevo->salario);
 
-        foreach ($incorporacion->puesto_nuevo->requisitos as $requisito) {
+        foreach ($incorporacion->puesto_nuevo->dde_requisitos as $requisito) {
             if ($requisito) {
                 $templateProcessor->setValue('puesto_nuevo.formacionRequerida', $requisito->formacion_requerida);
                 $templateProcessor->setValue('puesto_nuevo.experienciaProfesionalSegunCargo', $requisito->experiencia_profesional_segun_cargo);
@@ -368,7 +368,7 @@ class IncorporacionesController extends Controller
         $templateProcessor->setValue('puesto_nuevo.gerencia', $incorporacion->puesto_nuevo->departamento->gerencia->nombre);
 
         $gerencia = $incorporacion->puesto_nuevo->departamento->gerencia->nombre;
-        $gerenciasDepartamentos = array(
+        $dde_gerenciasdde_departamentos = array(
             "Gerencia Distrital La Paz I" => "el Departamento Administrativo y Recursos Humanos",
             "Gerencia Distrital La Paz II" => "la Administrativo y Recursos Humanos",
             "Gerencia GRACO La Paz" => "la Administrativo y Recursos Humanos",
@@ -388,8 +388,8 @@ class IncorporacionesController extends Controller
             "Gerencia Distrital Pando" => "la Administrativo y Recursos Humanos",
         );
 
-        if (isset($gerenciasDepartamentos[$gerencia])) {
-            $departamento = $gerenciasDepartamentos[$gerencia];
+        if (isset($dde_gerenciasdde_departamentos[$gerencia])) {
+            $departamento = $dde_gerenciasdde_departamentos[$gerencia];
         } else {
             $departamento = "el Departamento de Dotación y Evaluación";
         }
@@ -436,7 +436,7 @@ class IncorporacionesController extends Controller
         $templateProcessor->setValue('puesto_nuevo.denominacion', $incorporacion->puesto_nuevo->denominacion);
         $templateProcessor->setValue('puesto_nuevo.salario', $incorporacion->puesto_nuevo->salario);
 
-        foreach ($incorporacion->puesto_nuevo->requisitos as $requisito) {
+        foreach ($incorporacion->puesto_nuevo->dde_requisitos as $requisito) {
             if ($requisito) {
                 $templateProcessor->setValue('puesto_nuevo.formacionRequerida', $requisito->formacion_requerida);
                 $templateProcessor->setValue('puesto_nuevo.experienciaProfesionalSegunCargo', $requisito->experiencia_profesional_segun_cargo);
@@ -1114,9 +1114,9 @@ class IncorporacionesController extends Controller
         if ($incorporacion) {
             $puestoNuevo = $incorporacion->puesto_nuevo;
             if ($puestoNuevo) {
-                $requisitosPuestoNuevo = $puestoNuevo->requisitos;
-                if ($requisitosPuestoNuevo->isNotEmpty()) {
-                    $primerRequisitoPuestoNuevo = $requisitosPuestoNuevo->first();
+                $dde_requisitosPuestoNuevo = $puestoNuevo->dde_requisitos;
+                if ($dde_requisitosPuestoNuevo->isNotEmpty()) {
+                    $primerRequisitoPuestoNuevo = $dde_requisitosPuestoNuevo->first();
                     if ($primerRequisitoPuestoNuevo) {
                         $formacionRequerida = $primerRequisitoPuestoNuevo->formacion_requerida;
                         $expProfesionalSegunCargo = $primerRequisitoPuestoNuevo->experiencia_profesional_segun_cargo;
@@ -1310,9 +1310,9 @@ class IncorporacionesController extends Controller
         if ($incorporacion) {
             $puestoNuevo = $incorporacion->puesto_nuevo;
             if ($puestoNuevo) {
-                $requisitosPuestoNuevo = $puestoNuevo->requisitos;
-                if ($requisitosPuestoNuevo->isNotEmpty()) {
-                    $primerRequisitoPuestoNuevo = $requisitosPuestoNuevo->first();
+                $dde_requisitosPuestoNuevo = $puestoNuevo->dde_requisitos;
+                if ($dde_requisitosPuestoNuevo->isNotEmpty()) {
+                    $primerRequisitoPuestoNuevo = $dde_requisitosPuestoNuevo->first();
                     if ($primerRequisitoPuestoNuevo) {
                         $formacionRequerida = $primerRequisitoPuestoNuevo->formacion_requerida;
                         $expProfesionalSegunCargo = $primerRequisitoPuestoNuevo->experiencia_profesional_segun_cargo;

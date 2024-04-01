@@ -8,8 +8,8 @@ use App\Models\Puesto;
 class PuestoController extends Controller
 {
     public function getList() {
-        $puestos = Puesto::select(['denominacion', 'item', 'id'])->get();
-        return $this->sendSuccess($puestos);
+        $dde_puestos = Puesto::select(['denominacion', 'item', 'id'])->get();
+        return $this->sendSuccess($dde_puestos);
     }
 
     public function getById($puestoId) {
